@@ -1,13 +1,13 @@
 import React from 'react';
-import Radium from 'radium';
 
-import classes from './App.css';
+import Layout from './HOC/Layout/Layout';
+import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 
 function App() {
   return (
-    <div>
-    test
-    </div>
+    <Layout>
+      <BurgerBuilder />
+    </Layout>
   );
 }
 
