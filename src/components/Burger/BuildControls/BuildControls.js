@@ -16,6 +16,11 @@ const BuildControls = (props) => {
                         updateIngredients={props.updateIngredients} />
                 ))
             }
+            <button
+                onClick={props.handleOrderNow}
+                disabled={props.orderDisabled}
+                style={{ marginTop: 10 }}
+            >Order Now</button>
         </div>
     );
 }

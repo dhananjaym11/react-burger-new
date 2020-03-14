@@ -3,6 +3,8 @@ import React from 'react';
 import { INGREDIENT_PRICES } from '../../config/constants';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 class BurgerBuilder extends React.Component {
     state = {
@@ -12,25 +14,32 @@ class BurgerBuilder extends React.Component {
             cheese: 0,
             meat: 0
         },
-        totalPrice: 4.00
+        totalPrice: 4,
+        showModal: false
     }
 
     updateIngredients = (ingredient, operator) => {
-        const prevState = { ...this.state.ingredients };
-        let totalPrice = this.state.totalPrice;
+        const updatedIngredients = { ...this.state.ingredients };
+        let updatedTotalPrice = this.state.totalPrice;
         if (operator === '+') {
-            prevState[ingredient] = prevState[ingredient] + 1;
-            totalPrice += INGREDIENT_PRICES[ingredient];
+            updatedIngredients[ingredient] = updatedIngredients[ingredient] + 1;
+            updatedTotalPrice += INGREDIENT_PRICES[ingredient];
         } else {
-            if (prevState[ingredient]) {
-                prevState[ingredient] = prevState[ingredient] - 1;
-                totalPrice -= INGREDIENT_PRICES[ingredient];
+            if (updatedIngredients[ingredient]) {
+                updatedIngredients[ingredient] = updatedIngredients[ingredient] - 1;
+                updatedTotalPrice -= INGREDIENT_PRICES[ingredient];
             }
         }
         this.setState({
-            ingredients: prevState,
-            totalPrice: totalPrice
+            ingredients: updatedIngredients,
+            totalPrice: updatedTotalPrice
         })
+    }
+
+    toggleModal = () => {
+        this.setState(prevState => ({
+            showModal: !prevState.showModal
+        }))
     }
 
     render() {
@@ -38,6 +47,8 @@ class BurgerBuilder extends React.Component {
         for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0;
         }
+        const orderDisabled = !Object.values(this.state.ingredients).reduce((sum, val) => sum + val, 0);
+
         return (
             <>
                 <Burger
@@ -47,7 +58,16 @@ class BurgerBuilder extends React.Component {
                     totalPrice={this.state.totalPrice}
                     updateIngredients={this.updateIngredients}
                     disabledInfo={disabledInfo}
+                    orderDisabled={orderDisabled}
+                    handleOrderNow={this.toggleModal}
                 />
+                <Modal
+                    showModal={this.state.showModal}
+                    toggleModal={this.toggleModal}>
+                    <OrderSummary
+                        ingredients={this.state.ingredients}
+                        toggleModal={this.toggleModal} />
+                </Modal>
             </>
         )
     }
