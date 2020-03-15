@@ -66,6 +66,7 @@ class BurgerBuilder extends React.Component {
                     toggleModal={this.toggleModal}>
                     <OrderSummary
                         ingredients={this.state.ingredients}
+                        totalPrice={this.state.totalPrice}
                         toggleModal={this.toggleModal} />
                 </Modal>
             </>

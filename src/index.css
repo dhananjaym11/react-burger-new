@@ -4,7 +4,8 @@
 	box-sizing: border-box;
 }
 header {
-    height: 60px;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ccc;
 }
 main {
 	padding: 20px;
