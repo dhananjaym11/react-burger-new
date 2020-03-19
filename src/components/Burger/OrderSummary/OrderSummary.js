@@ -1,6 +1,6 @@
 import React from 'react';
 
-const OrderSummary = ({ ingredients, totalPrice, toggleModal }) => {
+const OrderSummary = ({ ingredients, totalPrice, purchaseHandler, toggleModal }) => {
     const ingredientsSummary = Object.entries(ingredients).filter(i => i[1] > 0);
     return (
         <>
@@ -11,7 +11,7 @@ const OrderSummary = ({ ingredients, totalPrice, toggleModal }) => {
             </ul>
             <p>Continue shopping?</p>
             <div className="buttons">
-                <button>Yes</button>
+                <button onClick={purchaseHandler}>Yes</button>
                 <button onClick={toggleModal}>Cancel</button>
             </div>
         </>

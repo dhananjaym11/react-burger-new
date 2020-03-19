@@ -44,3 +44,20 @@ main {
 .buttons button {
 	display: inline-block;
 }
+button + button {
+    margin-left: 5px;
+}
+.spinner {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    background: rgba(0,0,0,.1);
+}
+.spinner > div {
+    top: 50%;
+    position: relative;
+}
