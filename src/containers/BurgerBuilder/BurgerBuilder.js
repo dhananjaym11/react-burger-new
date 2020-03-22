@@ -108,8 +108,10 @@ class BurgerBuilder extends React.Component {
                             purchaseHandler={this.purchaseHandler}
                             toggleModal={this.toggleModal} />
                     </Modal>
+                    <Spinner isShow={this.state.showSpinner} />
                 </> :
-                    <Spinner isShow={this.state.showSpinner} />}
+                    <Spinner isShow={true} />
+                }
             </>
         )
     }

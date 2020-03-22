@@ -1,8 +1,10 @@
 import React from 'react';
 
+import Header from '../../components/Header/Header';
+
 const Layout = (props) => (
     <div>
-        <header>Header</header>
+        <Header />
         <main>
             {props.children}
         </main>
