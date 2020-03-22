@@ -12,7 +12,6 @@ class BurgerBuilder extends React.Component {
         ingredients: null,
         totalPrice: 4,
         showModal: false,
-        showSpinner: false,
         errorMsg: null
     }
 
@@ -47,32 +46,15 @@ class BurgerBuilder extends React.Component {
     }
 
     purchaseHandler = () => {
-        this.setState({
-            showModal: false,
-            showSpinner: true
+        let param = '';
+        param += `price=${this.state.totalPrice}`;
+        Object.keys(this.state.ingredients).forEach(ing => {
+            param += `&${ing}=${this.state.ingredients[ing]}`
         })
-        const data = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice
-        }
-        fetch('https://react-burger-new-cf0b5.firebaseio.com/orders.json', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(data)
-        }).then(response => response.json())
-            .then(result => {
-                this.setState({
-                    showSpinner: false
-                })
-            })
-            .catch(error => {
-                this.setState({
-                    showSpinner: false,
-                    errorMsg: error
-                })
-            });
+        this.props.history.push({
+            pathname: '/checkout',
+            search: param
+        });
     }
 
     render() {
@@ -108,7 +90,6 @@ class BurgerBuilder extends React.Component {
                             purchaseHandler={this.purchaseHandler}
                             toggleModal={this.toggleModal} />
                     </Modal>
-                    <Spinner isShow={this.state.showSpinner} />
                 </> :
                     <Spinner isShow={true} />
                 }

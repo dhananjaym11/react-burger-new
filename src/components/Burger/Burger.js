@@ -13,7 +13,7 @@ const Burger = (props) => {
         ingredientsUI = 'Please add ingredients'
     }
     return (
-        <div style={{ height: 100, overflow: 'auto' }}>
+        <div style={{ height: 110, overflow: 'auto' }}>
             <BurgerIngredient type='bread-top' />
             {ingredientsUI}
             <BurgerIngredient type='bread-bottom' />
