@@ -8,7 +8,7 @@ const CheckoutSummary = (props) => (
             ingredients={props.ingredients}
         />
         <div className="buttons">
-            <button onClick={props.checkoutContinue}>Continue</button>
+            <button disabled={!Object.keys(props.ingredients).length} onClick={props.checkoutContinue}>Continue</button>
             <button onClick={props.checkoutCancelled}>Cancel</button>
         </div>
     </div>
