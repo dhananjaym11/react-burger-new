@@ -10,6 +10,7 @@ export const removeIngredient = (ingredientName) => ({
     ingredientName
 })
 
-export const initIngredients = () => ({
-    type: actionType.INIT_INGREDIENTS
+export const initIngredients = (ingredients) => ({
+    type: actionType.INIT_INGREDIENTS,
+    ingredients
 })

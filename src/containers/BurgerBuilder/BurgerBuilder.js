@@ -7,6 +7,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions'
+import burgerBuilderService from '../../store/services/burgerBuilder.service';
 
 class BurgerBuilder extends React.Component {
     state = {
@@ -97,7 +98,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    getInitialIngredients: () => dispatch(actions.initIngredients()),
+    getInitialIngredients: () => dispatch(burgerBuilderService.getInitialIngredients()),
     addIngredient: (ingredientName) => dispatch(actions.addIngredient(ingredientName)),
     removeIngredient: (ingredientName) => dispatch(actions.removeIngredient(ingredientName)),
 });
