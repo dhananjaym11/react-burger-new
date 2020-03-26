@@ -17,9 +17,6 @@ class BurgerBuilder extends React.Component {
 
     componentDidMount() {
         this.props.getInitialIngredients();
-        // fetch('https://react-burger-new-cf0b5.firebaseio.com/ingredients.json')
-        //     .then(res => res.json())
-        //     .then(result => this.setState({ ingredients: result }));
     }
 
     updateIngredients = (ingredient, operator) => {
@@ -40,15 +37,7 @@ class BurgerBuilder extends React.Component {
     }
 
     purchaseHandler = () => {
-        let param = '';
-        param += `price=${this.props.totalPrice}`;
-        Object.keys(this.props.ingredients).forEach(ing => {
-            param += `&${ing}=${this.props.ingredients[ing]}`
-        })
-        this.props.history.push({
-            pathname: '/checkout',
-            search: param
-        });
+        this.props.history.push('/checkout');
     }
 
     render() {
