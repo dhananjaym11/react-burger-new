@@ -35,10 +35,8 @@ class Orders extends React.Component {
 
 const mapStateToProps = (state) => ({ orders: state.ordersReducer.orders })
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchOrders: () => dispatch(ordersService.fetchOrders())
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    fetchOrders: () => dispatch(ordersService.fetchOrders())
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Orders);

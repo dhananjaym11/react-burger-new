@@ -1,42 +1,35 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-import { INGREDIENT_PRICES } from '../../config/constants';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import * as actions from '../../store/actions'
 
 class BurgerBuilder extends React.Component {
     state = {
-        ingredients: null,
-        totalPrice: 4,
         showModal: false,
         errorMsg: null
     }
 
     componentDidMount() {
-        fetch('https://react-burger-new-cf0b5.firebaseio.com/ingredients.json')
-            .then(res => res.json())
-            .then(result => this.setState({ ingredients: result }));
+        this.props.getInitialIngredients();
+        // fetch('https://react-burger-new-cf0b5.firebaseio.com/ingredients.json')
+        //     .then(res => res.json())
+        //     .then(result => this.setState({ ingredients: result }));
     }
 
     updateIngredients = (ingredient, operator) => {
-        const updatedIngredients = { ...this.state.ingredients };
-        let updatedTotalPrice = this.state.totalPrice;
+        const updatedIngredients = { ...this.props.ingredients };
         if (operator === '+') {
-            updatedIngredients[ingredient] = updatedIngredients[ingredient] + 1;
-            updatedTotalPrice += INGREDIENT_PRICES[ingredient];
+            this.props.addIngredient(ingredient)
         } else {
             if (updatedIngredients[ingredient]) {
-                updatedIngredients[ingredient] = updatedIngredients[ingredient] - 1;
-                updatedTotalPrice -= INGREDIENT_PRICES[ingredient];
+                this.props.removeIngredient(ingredient)
             }
         }
-        this.setState({
-            ingredients: updatedIngredients,
-            totalPrice: updatedTotalPrice
-        })
     }
 
     toggleModal = () => {
@@ -47,9 +40,9 @@ class BurgerBuilder extends React.Component {
 
     purchaseHandler = () => {
         let param = '';
-        param += `price=${this.state.totalPrice}`;
-        Object.keys(this.state.ingredients).forEach(ing => {
-            param += `&${ing}=${this.state.ingredients[ing]}`
+        param += `price=${this.props.totalPrice}`;
+        Object.keys(this.props.ingredients).forEach(ing => {
+            param += `&${ing}=${this.props.ingredients[ing]}`
         })
         this.props.history.push({
             pathname: '/checkout',
@@ -60,22 +53,22 @@ class BurgerBuilder extends React.Component {
     render() {
         let disabledInfo = null;
         let orderDisabled = null;
-        if (this.state.ingredients) {
-            disabledInfo = { ...this.state.ingredients };
+        if (this.props.ingredients) {
+            disabledInfo = { ...this.props.ingredients };
             for (let key in disabledInfo) {
                 disabledInfo[key] = disabledInfo[key] <= 0;
             }
-            orderDisabled = !Object.values(this.state.ingredients).reduce((sum, val) => sum + val, 0);
+            orderDisabled = !Object.values(this.props.ingredients).reduce((sum, val) => sum + val, 0);
         }
 
         return (
             <>
-                {this.state.ingredients ? <>
+                {this.props.ingredients ? <>
                     <Burger
-                        ingredients={this.state.ingredients}
+                        ingredients={this.props.ingredients}
                     />
                     <BuildControls
-                        totalPrice={this.state.totalPrice}
+                        totalPrice={this.props.totalPrice}
                         updateIngredients={this.updateIngredients}
                         disabledInfo={disabledInfo}
                         orderDisabled={orderDisabled}
@@ -85,8 +78,8 @@ class BurgerBuilder extends React.Component {
                         showModal={this.state.showModal}
                         toggleModal={this.toggleModal}>
                         <OrderSummary
-                            ingredients={this.state.ingredients}
-                            totalPrice={this.state.totalPrice}
+                            ingredients={this.props.ingredients}
+                            totalPrice={this.props.totalPrice}
                             purchaseHandler={this.purchaseHandler}
                             toggleModal={this.toggleModal} />
                     </Modal>
@@ -98,4 +91,15 @@ class BurgerBuilder extends React.Component {
     }
 }
 
-export default BurgerBuilder;
+const mapStateToProps = (state) => ({
+    ingredients: state.burderBuilderReducer.ingredients,
+    totalPrice: state.burderBuilderReducer.totalPrice
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    getInitialIngredients: () => dispatch(actions.initIngredients()),
+    addIngredient: (ingredientName) => dispatch(actions.addIngredient(ingredientName)),
+    removeIngredient: (ingredientName) => dispatch(actions.removeIngredient(ingredientName)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(BurgerBuilder);
